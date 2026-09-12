@@ -1,169 +1,252 @@
 # PackRight
 
-PackRight is a local-first packing planner. Steps 0–5 establish typed contracts,
-durable GLB ingestion, canonical geometry extraction, browser-rendered previews,
-and schema-validated metadata enrichment with a conservative offline fallback.
+### Turn a pile of travel items into a validated, interactive 3D suitcase plan.
 
-## Requirements
+![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.116-009688?logo=fastapi&logoColor=white)
+![React](https://img.shields.io/badge/React-19-61DAFB?logo=react&logoColor=17202A)
+![Three.js](https://img.shields.io/badge/Three.js-r180-000000?logo=threedotjs&logoColor=white)
+![Tests](https://img.shields.io/badge/tests-95_passing-2C7655)
+![Local first](https://img.shields.io/badge/data-local--first-6F8979)
 
+PackRight is an AI-assisted, constraint-aware packing planner built for HackCMU. Upload 3D models of the things you want to bring, enter the usable dimensions and weight limit of your suitcase, and PackRight generates a packing arrangement you can inspect one item at a time in a real 3D scene.
+
+The key distinction is that PackRight does not stop at producing an attractive visualization. Every successful arrangement passes a separate deterministic validator that rechecks suitcase bounds, collisions, support, legal orientation, packing order, mandatory items, and total weight before the app labels it **feasible**.
+
+> PackRight answers three practical questions: **What fits? Where does it go? In what order should I pack it?**
+
+## Why PackRight
+
+Packing advice is usually qualitative: roll clothes, put heavy items near the wheels, and hope everything fits. Traditional bin-packing demos go to the other extreme—they optimize anonymous boxes without understanding that a camera is fragile, medication should remain accessible, or a bottle must stay upright.
+
+PackRight connects those two worlds:
+
+- **Real geometry in:** validated GLB uploads are converted into canonical, millimeter-based item dimensions.
+- **Human constraints preserved:** weight, priority, must-pack status, fragility, stackability, access preference, and legal orientations all affect the result.
+- **AI where it helps:** Gemini can suggest semantic handling metadata from standardized item views, while deterministic code remains responsible for geometry and feasibility.
+- **A usable answer out:** the result is an explorable suitcase model, numbered packing instructions, exclusions with reasons, and engineering diagnostics.
+
+## The judge experience
+
+1. Open the **Library** and choose several stock items or upload a custom `.glb` model.
+2. Review the generated front, side, top, and three-quarter views and confirm the item's handling metadata.
+3. Create a trip, set quantities and priorities, and mark anything that must be packed.
+4. Enter the suitcase's internal width, height, depth, empty weight, and baggage limit.
+5. Press **Pack these items**.
+6. Step through the validated arrangement in 3D, orbit the suitcase, toggle x-ray mode, inspect support and orientation, and view the approximate center of mass.
+7. Change the suitcase dimensions and replan without losing the previous result.
+
+A completed plan has a durable URL, so refreshing the page or reopening it later reconstructs the same immutable planning snapshot.
+
+## What makes the project technically distinctive
+
+### 1. Geometry is measured, not guessed
+
+The ingestion pipeline validates the GLB container, checks references and accessors, applies every scene-node transform—including repeated mesh instances—and computes world-space bounds in an isolated worker. The geometry stage derives a conservative oriented bounding box, a canonical transform, six proper rotations, volume estimates, and review warnings. GLB meters are converted to internal millimeters exactly once.
+
+### 2. AI suggestions cannot overrule physical truth
+
+When configured, Gemini receives four standardized previews, canonical dimensions, fill ratio, and the optional source filename. It can suggest a name, category, fragility, compressibility, stack class, legal orientations, and access preference. It never determines item dimensions, changes weight or trip priority, or decides whether a plan is valid.
+
+Responses are constrained by a JSON schema, normalized, retried once if malformed, versioned, and cached. If the provider is unavailable or no API key is configured, PackRight uses explicit conservative metadata and keeps the entire workflow functional.
+
+### 3. Selection and placement are separate problems
+
+PackRight first selects the highest-value feasible subset under weight and padded-volume constraints. Priorities use nonlinear utility—`1 / 3 / 7 / 15 / 31` for one through five stars—so a critical item is meaningfully more valuable than several optional ones. Must-pack failures are reported early and honestly.
+
+The placement engine then searches legal rotations at deterministic extreme points and face intersections. Its score favors:
+
+- a low approximate center of mass;
+- heavier items toward the wheel side;
+- quick-access items toward the opening;
+- compact layouts with less fragmented free space; and
+- stable support without loading items that cannot bear weight.
+
+For up to 16 eligible instances, item selection is exact within its budget. Larger or time-bounded searches use a deterministic beam strategy and are labeled heuristic rather than pretending that failure proves impossibility.
+
+### 4. Validation is independent of optimization
+
+The optimizer does not certify its own output. A separate validation boundary rebuilds padded dimensions and legal rotations from the immutable input snapshot, then recomputes:
+
+- finite coordinates and suitcase bounds;
+- pairwise collisions;
+- floor and item-to-item support area;
+- support-provider eligibility and dependency order;
+- legal item orientation;
+- inclusion of all mandatory instances;
+- baggage weight and retained utility; and
+- the approximate packed center of mass.
+
+A plan is marked **feasible** only if this validator returns no violations. Other outcomes distinguish a proven **infeasible** constraint from **search exhausted**, where no solution was found within the bounded search.
+
+### 5. The 3D viewer explains the answer
+
+The lazy-loaded Three.js viewer renders a recognizable suitcase shell around the validated packing space. It includes orbit controls, a numbered stepper, show-all and x-ray modes, item selection, shared colors between instructions and geometry, wheel/opening orientation, optional source-model context, clearance visualization, and an approximate center-of-mass marker. If WebGL is unavailable, exact coordinates and instructions remain accessible as a fallback.
+
+## End-to-end architecture
+
+```mermaid
+flowchart LR
+    A[GLB upload] --> B[Bounded ingestion]
+    B --> C[Canonical geometry]
+    C --> D[Browser preview capture]
+    D --> E{Gemini configured?}
+    E -- Yes --> F[Schema-validated suggestion]
+    E -- No or failed --> G[Conservative fallback]
+    F --> H[Human review]
+    G --> H
+    H --> I[Reusable item library]
+    I --> J[Trip + suitcase constraints]
+    J --> K[Immutable snapshot]
+    K --> L[Selection solver]
+    L --> M[3D placement search]
+    M --> N[Independent validator]
+    N --> O[Viewer + instructions + evidence]
+```
+
+| Layer | Technology | Responsibility |
+| --- | --- | --- |
+| Client | React 19, TypeScript, Vite | Upload, review, library, trip building, status recovery, and plan UI |
+| 3D | Three.js, GLTFLoader, OrbitControls | Canonical previews and the interactive suitcase scene |
+| API | FastAPI, Pydantic | Typed contracts, lifecycle orchestration, errors, and OpenAPI |
+| Geometry | Trimesh, NumPy, SciPy | GLB parsing, transformed bounds, canonicalization, and rotations |
+| Planning | Deterministic Python solver | Utility-aware selection and support-aware 3D placement |
+| Validation | Independent deterministic module | Reconstruct and verify every proposed placement |
+| Persistence | SQLite + local asset storage | Versioned geometry, previews, jobs, snapshots, plans, and recovery |
+| Optional AI | Gemini | Schema-constrained semantic handling suggestions |
+
+## Quick start
+
+### Prerequisites
+
+- Windows with PowerShell 7
 - Python 3.12
-- Node.js 20 or newer (tested with Node 24)
-- PowerShell 7 on Windows
+- Node.js 20 or newer
+- A browser with WebGL support
+- Optional: a Gemini API key for live metadata enrichment
 
-## Setup and run
+### Install
+
+From the repository root:
 
 ```powershell
 .\scripts\setup.ps1
 ```
 
-For development, run these in separate terminals:
+The setup script creates `.venv`, installs the locked Python dependencies, runs `npm ci`, and generates the deterministic demo fixtures.
+
+### Run in development
+
+Start the API and frontend in separate PowerShell terminals:
 
 ```powershell
 .\scripts\start-backend.ps1
+```
+
+```powershell
 .\scripts\start-frontend.ps1
 ```
 
-Open `http://127.0.0.1:5173`. The development server proxies `/api` to the
-loopback-only backend. For a same-origin production-style run:
+Open [http://127.0.0.1:5173](http://127.0.0.1:5173). Vite proxies `/api` to the loopback-only FastAPI service at port `8000`.
+
+### Run the production-style local build
 
 ```powershell
 .\scripts\start.ps1
 ```
 
-Then open `http://127.0.0.1:8000`. OpenAPI documentation is available at
-`http://127.0.0.1:8000/docs`.
+Open [http://127.0.0.1:8000](http://127.0.0.1:8000). This builds the frontend and serves the app and API from one local origin.
 
-## Step 1 item flow
+## Optional Gemini setup
 
-The Add item page requires exactly one GLB, a positive weight in g/kg/oz/lb, and
-a one-to-five-star priority. It saves the draft before sending the model, reports
-actual browser upload events separately from later geometry and enrichment work,
-and retains the selected file and entered values after errors. Content-identical
-uploads receive a non-blocking reuse warning. Selecting a rating fills every star
-through that value.
+PackRight is fully usable without Gemini. To enable live enrichment, set the key in the same terminal that starts the backend:
 
-## Step 2 ingestion
+```powershell
+$env:GEMINI_API_KEY = "your-key-here"
+.\scripts\start-backend.ps1
+```
 
-Drafts and asset records persist in `runtime-data/packright.sqlite3`. Uploads stream
-to generated temporary paths with a 50 MB hard limit, receive a SHA-256 digest, and
-pass GLB header/chunk/accessor/reference checks before entering an isolated Trimesh
-worker. The worker has a hard timeout, a 2048 MB process-memory limit, and decoded
-geometry limits. It applies every scene-node transform and reports world-space
-bounds, including repeated mesh instances.
+To select another provider-supported Gemini model:
 
-Accepted originals are atomically moved to
-`runtime-data/assets/<generated asset UUID>/model.glb`; user filenames never become
-storage paths. Failed temporary files are removed, while the item and asset records
-retain stable recoverable error codes. `/api/items/{id}/status` and
-`/api/items/{id}/asset` expose processing state and safe asset metadata.
+```powershell
+$env:GEMINI_MODEL = "your-model-id"
+```
 
-## Steps 3–5 processing
+Do not paste an API key into source code or commit it to Git. The server reads credentials from the environment, never returns them through `/api/config`, and never sends item weight or user priority to the model.
 
-`POST /api/items/{id}/process` combines world-space mesh instances, calculates a
-versioned conservative OBB and canonical transforms, and converts meters to
-millimeters once. Scale corrections create a new geometry version. Six proper
-rotations, reliable volume/fill values, preview framing, and review warnings are
-stored with the geometry.
+## Two-minute demo path
 
-The browser loads the original GLB, applies that persisted transform, and captures
-front, side, top, and three-quarter views. The API verifies that uploaded PNG/WebP
-previews are bounded and nonblank, creates a thumbnail, and caches all views against
-the geometry and renderer versions. A WebGL failure leaves a clearly labeled
-dimension-box fallback and continues with neutral metadata.
+For a clean deterministic demo record, start the production-style app and run:
 
-When `GEMINI_API_KEY` is configured, the server sends the four generated previews,
-canonical dimensions, fill ratio, and optional filename to Gemini. Weight and star
-priority are neither sent nor changed. Responses are schema-validated, normalized,
-retried once when invalid, recorded, and cached. Missing credentials, previews,
-timeouts, provider errors, or invalid output use explicit conservative metadata.
+```powershell
+$demo = Invoke-RestMethod -Method Post http://127.0.0.1:8000/api/operations/demo/prepare
+$demo.plan_id
+```
 
-## Steps 6–8 review, library, and trips
+Then open `http://127.0.0.1:8000/plans/<plan_id>`.
 
-The review screen keeps the generated suggestion and each user-confirmed handling
-version separately. Normal items can be saved directly; only suspicious scale,
-liquid/container ambiguity, or low-confidence handling creates a focused question.
-The advanced drawer exposes every handling field. Replacement uploads invalidate
-the current derived state, and uniform scale corrections regenerate geometry and
-previews before confirmation.
+Suggested presentation flow:
 
-The reusable library separates Custom items from 12 clearly labeled Stock examples.
-It supports search, category filtering, card/list layouts, multi-select, review links
-for incomplete drafts, and cloning without modifying the stock source.
+1. Show the selected items, suitcase constraints, requested weight, and preflight warnings.
+2. Generate or open the plan and reveal the first three placements with the stepper.
+3. Orbit the model to show the wheel side, opening, item orientation, support, and center of mass.
+4. Narrow one suitcase dimension and replan while the previous validated result remains visible.
+5. Show the resulting evidence if the new constraint is infeasible or the search budget is exhausted.
+6. Refresh the plan URL and open the engineering details to demonstrate persistence, snapshot identity, validation status, solver version, and seed.
 
-Trip drafts persist in SQLite and are resumed from the browser's saved active-trip
-ID. Quantities expand to stable server-generated instance IDs. Priority and must-pack
-are trip-only overrides. The builder reports requested weight, nonlinear utility,
-available baggage weight, missing data, oversize items, and overweight requests.
-Pressing **Pack these items** records an immutable input snapshot and queues a persisted plan job. The browser polls the job by ID, so refresh or navigation does not erase the operation; a completed plan URL reloads from its own snapshot.
+Demo preparation is deterministic and safe to repeat. To remove only records explicitly marked as demo data:
 
-## Steps 9–11 suitcase and packing
+```powershell
+Invoke-RestMethod -Method Post http://127.0.0.1:8000/api/operations/demo/reset
+```
 
-The suitcase editor supports mm/cm/in dimensions, g/kg/oz/lb weights, named local
-presets, an axis- and wheel-labeled diagram, and 0–15 mm total-per-axis clearance.
-All values are normalized to millimeters and grams at the API boundary. Per-trip
-changes use a copy and never silently modify the selected preset.
+Personal items and trips are not touched by this operation.
 
-Packing expands stable trip instances and applies `max(4 mm, 2% of dimension)` item
-padding before rotation. For up to 16 eligible instances, selection is exact under
-the weight and padded-volume necessary constraints; larger trips use a deterministic
-bounded beam and are labeled heuristic. Utility is 1/3/7/15/31 for priorities 1–5.
-Mandatory oversize, mandatory overweight, and impossible mandatory aggregate volume
-are proven early. Baseline selectors pass through the same placement and validation
-pipeline before their diagnostic results are recorded.
+## Core product capabilities
 
-The deterministic 3D placement beam tests legal rotations at generated extreme and
-face-intersection points. It enforces bounds, collisions, 80% ordinary or 95% base
-support, and support-provider eligibility. Its soft score favors a low approximate
-center of mass, wheel-side mass, quick access near the opening, and less fragmentation.
-Every successful plan passes an independent validation boundary before receiving
-`feasible`; otherwise the API reports a proven `infeasible` or honest
-`search_exhausted` state. Solver version, seed, measured runtime, diagnostics,
-snapshot, placements, exclusions, and validator result are persisted.
+| Area | Capabilities |
+| --- | --- |
+| Item ingestion | Streaming upload, 50 MB limit, GLB structural checks, SHA-256 identity, safe generated storage paths, worker timeout and memory limits |
+| Canonicalization | World-space scene transforms, repeated instances, conservative OBB, scale correction, dimension and fill warnings |
+| Previews | Front, side, top, three-quarter, thumbnail, geometry-aware camera fitting, visible loading/error states, cuboid fallback |
+| Metadata | Optional Gemini suggestion, strict schema validation, confidence values, conservative fallback, human confirmation, versioned edits |
+| Library | 12 labeled stock items, custom items, search, filters, card/list views, multi-select, cloning, deletion and restoration support |
+| Trips | Multiple items, quantities, stable per-copy IDs, must-pack and priority overrides, resumable trip state, weight and size preflight |
+| Suitcases | Internal dimensions in mm/cm/in, weights in g/kg/oz/lb, presets, clearance, usable-space summary, explicit X/Y/Z diagram |
+| Planning | Immutable snapshots, asynchronous jobs, deterministic seed, exact/bounded selection, legal rotations, support-aware placement |
+| Results | Plan state, exclusions with evidence, numbered instructions, 3D stepper, x-ray, quick replan, engineering diagnostics |
+| Recovery | Durable SQLite jobs, retryable interrupted work, reloadable plan URLs, idempotent confirmation and planning requests |
 
-## Steps 12–14 validation, instructions, and viewer
+## Data model and coordinate contract
 
-The independent validator reconstructs padded dimensions and legal rotations from
-the immutable snapshot, then checks finite coordinates, bounds, pairwise collision,
-support union/provider eligibility, stack order, mandatory inclusion, weight, and
-all derived metrics. It returns typed violations and never trusts optimizer metrics.
+PackRight uses a deliberately explicit physical contract:
 
-Validated plans include deterministic numbered instructions with copy labels,
-destinations, orientation names, and handling notes. Exclusions use only recorded
-solver evidence; unsuccessful plans call out missing mandatory items and suggest
-which suitcase constraint to edit. Instructions are also available at
-`GET /api/plans/{id}/instructions`.
+- Internal lengths are millimeters; weights are grams; source GLB coordinates are meters.
+- `X` is suitcase width.
+- `Y` is vertical height.
+- `Z` runs from the wheel side toward the opening.
+- Suitcase clearance is the total reduction per axis, inset equally from both sides.
+- Each packed item receives padding of `max(4 mm, 2% of that dimension)` before rotation and collision checks.
+- Every trip copy has its own stable UUID; a reusable library record is never used as a placement identity.
+- Compression is descriptive metadata and does not silently shrink measured geometry.
 
-The plan viewer is a lazy-loaded Three.js scene with OrbitControls and a scene-level
-fallback. It provides a translucent suitcase, shared instance colors, labeled
-validated cuboids, optional GLB context, step back/forward, show-all, x-ray, reset
-camera, depth-aware orbiting, an approximate center-of-mass marker, typed validation
-details, and an engineering drawer. Quick edits create a new replan job against a
-new snapshot; the prior plan stays mounted and marked outdated while the job runs.
+These conventions are shared by the API, solver, validator, dimension graphic, and 3D viewer.
 
-## Steps 15–16 persistence and API operations
+## Persistence and recovery
 
-SQLite initialization uses a forward-only `schema_migrations` table (currently
-version 3; `PRAGMA user_version` is only a compatibility marker) and stores
-immutable trip snapshots/plans, versioned geometry/previews, model runs,
-idempotency responses with request hashes, processing/plan-job recovery state, and
-explicitly marked demo records. Startup converts interrupted server-owned jobs to
-`retryable`; status is available at `/api/processing/status` and each plan job has a
-real retry endpoint. `POST /api/operations/demo/prepare` is deterministic and
-safe to repeat; `POST /api/operations/demo/reset` touches only explicitly marked
-demo records, so reset does not touch personal trips or items.
+Runtime state lives under `runtime-data/` and is intentionally excluded from version control:
 
-Plan creation is available at `/api/trips/{id}/plan-jobs` and the legacy synchronous
-compatibility route. `GET /api/plan-jobs/{id}` exposes queued/running/completed/
-failed/retryable state, and `POST /api/plans/{id}/replan-jobs` always creates a new
-immutable snapshot linked to its predecessor. `POST /api/plans/{id}/validate`
-reruns the independent validator. Confirmation and plan writes accept
-`X-Idempotency-Key`; a replay with the same canonical body returns the original
-result and a different body returns `409 idempotency_conflict`. Request
-IDs are echoed in `X-Request-ID` and structured logs include method, stage,
-status, and timing without uploaded contents or credentials. Heavy geometry,
-enrichment, and solver work is offloaded from the async request loop.
+```text
+runtime-data/
+├── packright.sqlite3   # canonical records and immutable snapshots
+├── assets/             # accepted source GLBs
+├── previews/           # generated canonical previews
+└── tmp/                # bounded in-progress uploads
+```
 
-Back up both the database and local assets together. For example:
+SQLite migrations are forward-only. If the server stops during geometry processing or planning, startup converts interrupted work into an explicit retryable state instead of leaving the UI spinning indefinitely. The browser stores only the active trip ID; canonical state is read from the API.
+
+Back up the database, models, and previews together:
 
 ```powershell
 Copy-Item runtime-data/packright.sqlite3 backups/packright.sqlite3
@@ -171,10 +254,19 @@ Copy-Item runtime-data/assets backups/assets -Recurse
 Copy-Item runtime-data/previews backups/previews -Recurse
 ```
 
-Restore by stopping the API, replacing those exact paths, and restarting; schema
-initialization applies additive migrations without changing immutable snapshots.
+## API and operational behavior
 
-## Test
+Interactive OpenAPI documentation is available while the backend is running:
+
+- Development: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+- Health: [`GET /api/health`](http://127.0.0.1:8000/api/health)
+- Public limits and capabilities: [`GET /api/config`](http://127.0.0.1:8000/api/config)
+
+The API exposes typed resources for items, assets, geometry, previews, enrichment, library entries, suitcases, trips, snapshots, plan jobs, plans, validation, and instructions. Long-running planning work returns a persisted job that the frontend polls by ID. Confirmation and plan writes support `X-Idempotency-Key`, and every response receives an `X-Request-ID` for diagnostics.
+
+## Testing and verification
+
+Run the complete automated suite from the repository root:
 
 ```powershell
 .\.venv\Scripts\python.exe -m pytest
@@ -182,65 +274,71 @@ npm --prefix frontend test
 npm --prefix frontend run build
 ```
 
-The frontend build uses Vite's runner config loader for Windows/OneDrive
-compatibility. The build output keeps the viewer and GLTF decoder in lazy chunks;
-the trip form does not pay that preview cost until a plan is opened.
+Current verified baseline:
 
-## Recovery and local data
+- **86 backend tests passing** across ingestion, geometry, previews, enrichment, review, library, trips, suitcase handling, placement, validation, API behavior, persistence, and remediation regressions.
+- **9 frontend tests passing** for the API client and 3D scene contract.
+- **Production TypeScript/Vite build passing.**
 
-The local database and generated files live under `runtime-data/`. An interrupted
-geometry or plan operation is shown as retryable after restart. Geometry recovery
-can be retried server-side; browser-owned preview capture must be reopened in a
-browser, and a plan can always be inspected with validated cuboids. The browser
-stores only the active trip ID and canonical state is fetched from the API.
-
-For a clean demo rehearsal, run:
-
-```powershell
-Invoke-RestMethod -Method Post http://127.0.0.1:8000/api/operations/demo/prepare
-Invoke-RestMethod -Method Post http://127.0.0.1:8000/api/operations/demo/reset
-```
-
-For a complete local reset during development, stop the API and run
-`.\scripts\clean-runtime.ps1`. It verifies that only the workspace runtime
-directory is removed. This is intentionally a development command, not an
-application action.
-
-## Contracts and conventions
-
-- Internal length is millimeters and weight is grams. GLB coordinates are meters.
-- X is width, Y is vertical height, and Z runs from the wheel side toward the opening.
-- Suitcase clearance is the total reduction per axis; the usable box is inset by
-  half the clearance on each side.
-- Item clearance will add `max(4 mm, 2% of the dimension)` to each canonical box
-  dimension before rotation.
-- Trip copies receive distinct stable UUIDs. A library record is never used as a
-  placement identity.
-- A solver may return `search_exhausted`; heuristic failure is not presented as
-  proof of infeasibility.
-- A plan can be `feasible` only when it contains an independently valid validation result.
-- Compression is metadata only and does not alter measured geometry.
-
-Configured bounds live in [`config/limits.json`](config/limits.json). Public
-capabilities and limits are exposed at `/api/config`; credentials are never
-returned. Gemini is optional, and a missing key leaves neutral enrichment fallback
-available.
-
-## Data and fixtures
-
-`runtime-data/` is created on API startup and intentionally excluded from version
-control. It contains local mutable assets, previews, and temporary processing data.
-
-All content under `assets/demo/` is explicitly generated demo data, not a real scan.
-Regenerate known-dimension, nested-transform, repeated-instance, and malformed GLBs
-with:
+Synthetic GLB fixtures cover known dimensions, nested translation/rotation/scale/matrix transforms, repeated instances, truncated data, malformed JSON, bad magic bytes, and invalid references. Regenerate them with:
 
 ```powershell
 .\.venv\Scripts\python.exe scripts\generate_fixtures.py
 ```
 
-`assets/stock/` is reserved for later clearly labeled example templates.
+Acceptance evidence and the demo rehearsal materials live in [`docs/acceptance/`](docs/acceptance/).
 
-The five user-supplied reference scans and their weights remain in `assets/demo/`.
-`scan-weights.json` mirrors `Scan Weights.xlsx` for deterministic automated tests;
-it does not seed production records.
+## Repository structure
+
+```text
+PackRight/
+├── backend/
+│   ├── app/                  # FastAPI, domain logic, solver, validator, persistence
+│   ├── migrations/           # forward-only SQLite migrations
+│   └── requirements*.txt
+├── frontend/
+│   └── src/
+│       ├── components/       # review, suitcase, metrics, instructions, viewer
+│       ├── pages/            # add item, library, trip builder, plan
+│       ├── three/            # canonical model preview capture
+│       └── viewer/           # interactive suitcase scene contract/runtime
+├── config/                   # limits, AI prompt, and response schema
+├── assets/demo/              # generated GLB fixtures and demo data
+├── docs/acceptance/          # acceptance matrix, limitations, demo script
+├── scripts/                  # setup, run, fixture, and safe cleanup commands
+└── tests/                    # backend integration and domain tests
+```
+
+## Configured safety limits
+
+Public limits are defined in [`config/limits.json`](config/limits.json) and exposed through `/api/config`. The current defaults include:
+
+- 50 MB maximum GLB upload;
+- 100 kg maximum item weight;
+- 3,000 mm maximum item dimension;
+- 24 item instances per trip;
+- 30-second geometry-processing timeout;
+- 2 GB parser-worker memory limit;
+- 2.75-second solver budget; and
+- 15 mm maximum suitcase clearance.
+
+Uploads are streamed to generated temporary paths, validated before acceptance, and atomically moved into generated asset directories. User filenames never become storage paths. The API binds to `127.0.0.1` by default and logs request metadata without logging uploaded contents or credentials.
+
+## Honest limitations
+
+PackRight is a planning aid, not an airline, safety, or physics certification system.
+
+- Certified feasibility is conservative and box-based; detailed meshes are visual context, not collision-certified surfaces.
+- The center of mass assumes each item's mass is centered in its validated box.
+- The planner does not simulate flexible deformation, insertion paths, zippers, straps, or irregular contact physics.
+- A `search_exhausted` result means no arrangement was found inside the bounded search—not that no arrangement exists.
+- Browser-generated previews require WebGL, although cuboid review and packing instructions remain available without it.
+- The current build is local-first and has no accounts, cloud synchronization, airline-specific rule database, or native mobile client.
+
+We expose these boundaries in the product because trustworthy optimization includes being precise about what has—and has not—been proven.
+
+## Built for HackCMU
+
+PackRight was designed as a polished hackathon project with a clear demo surface and an unusually rigorous foundation: typed contracts, durable operations, deterministic optimization, independent validation, graceful AI fallback, and a 3D result that a traveler can actually follow.
+
+The result is more than a bin-packing visualization. It is a complete path from **real item geometry** to a **reviewable packing decision**.
