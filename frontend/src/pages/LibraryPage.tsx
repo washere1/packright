@@ -1,0 +1,28 @@
+import { useEffect, useMemo, useState } from "react";
+import { api } from "../api";
+import type { LibraryItem } from "../contracts";
+
+export function LibraryPage({ onBuildTrip, onReview }: { onBuildTrip: (ids: string[]) => void; onReview: (id: string) => void }) {
+  const [kind, setKind] = useState<"custom" | "stock">("custom"); const [search, setSearch] = useState("");
+  const [category, setCategory] = useState(""); const [items, setItems] = useState<LibraryItem[]>([]);
+  const [lifecycle, setLifecycle] = useState<"draft" | "ready" | "archived">("ready");
+  const [selected, setSelected] = useState<Set<string>>(new Set()); const [view, setView] = useState<"cards" | "list">("cards");
+  const [message, setMessage] = useState<string | null>(null); const [busyId, setBusyId] = useState<string | null>(null);
+  const load = () => api.library(kind, search, category, kind === "custom" ? lifecycle : undefined).then(setItems).catch(error => setMessage(error.message));
+  useEffect(() => { void load(); }, [kind, search, category, lifecycle]);
+  const categories = useMemo(() => [...new Set(items.map(item => item.category))].sort(), [items]);
+  const toggle = (item: LibraryItem) => setSelected(current => { const next = new Set(current); next.has(item.id) ? next.delete(item.id) : next.add(item.id); return next; });
+  const archive = async (item: LibraryItem) => { if (!window.confirm(`Archive “${item.name}”? You can restore it later.`)) return; setBusyId(item.id); setMessage(null); try { await api.deleteItem(item.id); setSelected(current => { const next = new Set(current); next.delete(item.id); return next; }); await load(); setMessage(`${item.name} moved to Archived.`); } catch (error) { setMessage(error instanceof Error ? error.message : "Could not archive item."); } finally { setBusyId(null); } };
+  const restore = async (item: LibraryItem) => { setBusyId(item.id); setMessage(null); try { await api.restoreItem(item.id); await load(); setMessage(`${item.name} restored to your ready library.`); } catch (error) { setMessage(error instanceof Error ? error.message : "Could not restore item."); } finally { setBusyId(null); } };
+  return <main className="library-page">
+    <header className="section-header"><div><p className="eyebrow">REUSABLE ITEM LIBRARY</p><h1>Choose what’s coming</h1><p>Mix your confirmed items with clearly labeled example templates.</p></div><button className="primary inline" disabled={!selected.size} onClick={() => onBuildTrip([...selected])}>Configure trip ({selected.size})</button></header>
+    <div className="library-controls"><div className="tabs" role="tablist"><button role="tab" aria-selected={kind === "custom"} onClick={() => setKind("custom")}>Custom</button><button role="tab" aria-selected={kind === "stock"} onClick={() => setKind("stock")}>Stock examples</button></div>{kind === "custom" && <label>Status<select value={lifecycle} onChange={event => setLifecycle(event.target.value as typeof lifecycle)}><option value="ready">Ready</option><option value="draft">Needs review</option><option value="archived">Archived</option></select></label>}<label>Search<input type="search" value={search} onChange={event => setSearch(event.target.value)} placeholder="Search items" /></label><label>Category<select value={category} onChange={event => setCategory(event.target.value)}><option value="">All</option>{categories.map(value => <option key={value}>{value}</option>)}</select></label><div className="view-toggle"><button className={view === "cards" ? "active" : ""} onClick={() => setView("cards")}>Cards</button><button className={view === "list" ? "active" : ""} onClick={() => setView("list")}>List</button></div></div>
+    {message && <p className="notice error">{message}</p>}
+    <section className={`library-grid ${view}`} aria-live="polite">{items.map(item => <article className={`library-item ${selected.has(item.id) ? "selected" : ""}`} key={item.id}>
+      <div className="library-thumb">{item.thumbnail_id ? <img src={`/api/previews/${item.thumbnail_id}`} alt="" /> : <span>{item.name.slice(0, 1)}</span>}</div>
+      <div className="library-copy"><div><h2>{item.name}</h2>{item.example_values && <small className="example-label">Example dimensions & weight</small>}</div><p>{item.dimensions_mm ? `${item.dimensions_mm.width} × ${item.dimensions_mm.height} × ${item.dimensions_mm.depth} mm` : "Dimensions pending"} · {item.weight_g.toLocaleString()} g</p><p>{"★".repeat(item.priority_stars)}{"☆".repeat(5-item.priority_stars)} · {item.handling ? `${item.handling.fragility} fragility` : "Handling pending"}</p><span className={`readiness ${item.ready ? "ready" : "draft"}`}>{item.ready ? "Ready" : "Needs review"}</span></div>
+      <div className="library-actions">{item.lifecycle === "archived" ? <button className="secondary" disabled={busyId === item.id} onClick={() => void restore(item)}>Restore</button> : item.ready ? <button className="secondary" onClick={() => toggle(item)}>{selected.has(item.id) ? "Selected" : "Select"}</button> : <button className="secondary" onClick={() => onReview(item.id)}>Review</button>}{item.kind === "custom" && item.lifecycle !== "archived" && <button className="text-button danger" disabled={busyId === item.id} onClick={() => void archive(item)}>Archive</button>}{item.kind === "stock" && <button className="text-button" onClick={() => void api.cloneStock(item.id).then(clone => { setMessage(`${item.name} cloned to Custom. Review cloned item.`); void load(); onReview(clone.id); }).catch(error => setMessage(error instanceof Error ? error.message : "Could not clone item."))}>Clone to Custom</button>}</div>
+    </article>)}</section>
+    {!items.length && <p className="empty-state">No items match these filters.</p>}
+  </main>;
+}

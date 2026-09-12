@@ -1,0 +1,24 @@
+{
+  "id": "00000000-0000-4000-8000-000000000001",
+  "name": "Generated six-item demo",
+  "generated_demo": true,
+  "suitcase": {
+    "id": "00000000-0000-4000-8000-000000000002",
+    "name": "Demo carry-on",
+    "internal_dimensions_mm": { "width": 350, "height": 230, "depth": 510 },
+    "empty_weight_g": 3200,
+    "baggage_limit_g": 12000,
+    "clearance_mm": 8,
+    "display_length_unit": "mm",
+    "display_weight_unit": "g"
+  },
+  "items": [
+    { "name": "Demo laptop", "item_id": "10000000-0000-4000-8000-000000000001", "instance_id": "20000000-0000-4000-8000-000000000001", "weight_g": 1450, "priority_stars": 5, "must_pack": true, "dimensions_mm": [305, 215, 18] },
+    { "name": "Demo shirt", "item_id": "10000000-0000-4000-8000-000000000002", "instance_id": "20000000-0000-4000-8000-000000000002", "weight_g": 240, "priority_stars": 3, "must_pack": false, "dimensions_mm": [280, 210, 35] },
+    { "name": "Demo shoes", "item_id": "10000000-0000-4000-8000-000000000003", "instance_id": "20000000-0000-4000-8000-000000000003", "weight_g": 780, "priority_stars": 4, "must_pack": false, "dimensions_mm": [310, 205, 120] },
+    { "name": "Demo toiletry bag", "item_id": "10000000-0000-4000-8000-000000000004", "instance_id": "20000000-0000-4000-8000-000000000004", "weight_g": 620, "priority_stars": 4, "must_pack": true, "dimensions_mm": [240, 140, 95] },
+    { "name": "Demo book", "item_id": "10000000-0000-4000-8000-000000000005", "instance_id": "20000000-0000-4000-8000-000000000005", "weight_g": 510, "priority_stars": 2, "must_pack": false, "dimensions_mm": [225, 150, 32] },
+    { "name": "Demo headphones", "item_id": "10000000-0000-4000-8000-000000000006", "instance_id": "20000000-0000-4000-8000-000000000006", "weight_g": 290, "priority_stars": 3, "must_pack": false, "dimensions_mm": [205, 180, 85] }
+  ]
+}
+

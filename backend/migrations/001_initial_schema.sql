@@ -1,0 +1,2 @@
+-- The Python repository bootstrap owns the baseline tables for compatibility with
+-- the prototype database. This migration is recorded in schema_migrations.

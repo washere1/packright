@@ -1,0 +1,29 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "name": { "type": "string", "maxLength": 120 },
+    "category": { "type": "string", "maxLength": 120 },
+    "fragility": { "type": "string", "enum": ["low", "medium", "high"] },
+    "compressibility": { "type": "string", "enum": ["none", "light", "high"] },
+    "stack_class": { "type": "string", "enum": ["base", "neutral", "top_only"] },
+    "can_support_weight": { "type": "boolean" },
+    "liquid_risk": { "type": "boolean" },
+    "allowed_orientations": {
+      "type": "array", "minItems": 1, "maxItems": 6, "items": { "type": "string", "enum": ["xyz", "xzy", "yxz", "yzx", "zxy", "zyx"] }
+    },
+    "access": { "type": "string", "enum": ["buried_ok", "normal", "quick"] },
+    "short_reason": { "type": "string", "maxLength": 240 },
+    "needs_confirmation": { "type": "array", "maxItems": 8, "items": { "type": "string", "maxLength": 120 } },
+    "confidence": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "name": { "type": "number" }, "category": { "type": "number" }, "fragility": { "type": "number" },
+        "compressibility": { "type": "number" }, "stack_class": { "type": "number" },
+        "orientations": { "type": "number" }, "access": { "type": "number" }
+      },
+      "required": ["name", "category", "fragility", "compressibility", "stack_class", "orientations", "access"]
+    }
+  },
+  "required": ["name", "category", "fragility", "compressibility", "stack_class", "can_support_weight", "liquid_risk", "allowed_orientations", "access", "short_reason", "needs_confirmation", "confidence"]
+}

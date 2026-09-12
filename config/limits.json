@@ -1,0 +1,17 @@
+{
+  "max_upload_bytes": 52428800,
+  "max_item_weight_g": 100000,
+  "max_dimension_mm": 3000,
+  "max_trip_instances": 24,
+  "processing_timeout_seconds": 30,
+  "parser_memory_limit_mb": 2048,
+  "max_glb_json_bytes": 8388608,
+  "max_scene_nodes": 50000,
+  "max_decoded_vertices": 2000000,
+  "max_decoded_faces": 4000000,
+  "max_preview_bytes": 5242880,
+  "max_preview_dimension_px": 2048,
+  "model_timeout_seconds": 10,
+  "solver_budget_seconds": 2.75,
+  "max_suitcase_clearance_mm": 15
+}

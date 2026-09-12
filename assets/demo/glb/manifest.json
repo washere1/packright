@@ -1,0 +1,53 @@
+{
+  "generated": true,
+  "source_units": "meters",
+  "fixtures": {
+    "known_box_300x200x100.glb": {
+      "base_dimensions_m": [
+        0.3,
+        0.2,
+        0.1
+      ]
+    },
+    "nested_translation.glb": {
+      "base_dimensions_m": [
+        0.3,
+        0.2,
+        0.1
+      ]
+    },
+    "nested_scale.glb": {
+      "base_dimensions_m": [
+        0.3,
+        0.2,
+        0.1
+      ]
+    },
+    "nested_rotation.glb": {
+      "base_dimensions_m": [
+        0.3,
+        0.2,
+        0.1
+      ]
+    },
+    "nested_matrix.glb": {
+      "base_dimensions_m": [
+        0.3,
+        0.2,
+        0.1
+      ]
+    },
+    "repeated_instance.glb": {
+      "base_dimensions_m": [
+        0.2,
+        0.1,
+        0.05
+      ]
+    }
+  },
+  "malformed": [
+    "bad_magic.glb",
+    "truncated.glb",
+    "invalid_json.glb"
+  ]
+}

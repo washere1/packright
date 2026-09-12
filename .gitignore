@@ -1,0 +1,10 @@
+.venv/
+frontend/node_modules/
+frontend/dist/
+runtime-data/
+__pycache__/
+.pytest_cache/
+.coverage
+*.py[cod]
+.env
+

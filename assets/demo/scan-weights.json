@@ -1,0 +1,12 @@
+{
+  "generated_demo": false,
+  "source": "Scan Weights.xlsx, Sheet1!A1:B6",
+  "unit": "g",
+  "items": [
+    { "model": "Measuring Tape.glb", "weight_g": 156 },
+    { "model": "Mouse.glb", "weight_g": 94 },
+    { "model": "Board Game.glb", "weight_g": 632 },
+    { "model": "Puzzle Box.glb", "weight_g": 30 },
+    { "model": "Marker.glb", "weight_g": 11 }
+  ]
+}
