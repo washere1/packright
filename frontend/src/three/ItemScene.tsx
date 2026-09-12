@@ -1,4 +1,5 @@
 import type { Geometry, PreviewRecord } from "../contracts";
+import { PreviewImage } from "../components/PreviewImage";
 
 const labels = { front: "Front", side: "Side", top: "Top", three_quarter: "Three-quarter" } as const;
 
@@ -8,7 +9,7 @@ export function ItemScene({ geometry, previews, renderingFailed }: { geometry: G
     <section className="preview-card" aria-label="Canonical model previews">
       <h2>Model views</h2>
       <div className="preview-grid">{actual.map(preview => <figure key={preview.id}>
-        <img src={`/api/previews/${preview.id}`} alt={`${labels[preview.view as keyof typeof labels]} view of the uploaded model`} />
+        <PreviewImage src={`/api/previews/${preview.id}`} alt={`${labels[preview.view as keyof typeof labels]} view of the uploaded model`} />
         <figcaption>{labels[preview.view as keyof typeof labels]}</figcaption>
       </figure>)}</div>
     </section>
