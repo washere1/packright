@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api, uploadAsset } from "../api";
 import type { HandlingEdit, ItemReview, OrientationId, PreviewRecord } from "../contracts";
+import { PreviewImage } from "./PreviewImage";
 
 const ORIENTATIONS: OrientationId[] = ["xyz", "xzy", "yxz", "yzx", "zxy", "zyx"];
 
@@ -60,7 +61,7 @@ export function MetadataReview({ itemId, onReady, onDeleted }: { itemId: string;
   return <section className="review-card" aria-label="Item review">
     <div className="review-heading"><div><p className="eyebrow">REVIEW ITEM</p><h2>{name || "Unnamed item"}</h2></div><span className={`readiness ${item.stage}`}>{item.stage.replaceAll("_", " ")}</span></div>
     {images.length > 0 ? <div className="interactive-preview">
-      <img src={`/api/previews/${images[activePreview % images.length].id}`} alt={`${images[activePreview % images.length].view} canonical model view`} />
+      <PreviewImage src={`/api/previews/${images[activePreview % images.length].id}`} alt={`${images[activePreview % images.length].view} canonical model view`} />
       <div>{images.map((preview, index) => <button type="button" className={index === activePreview ? "active" : ""} onClick={() => setActivePreview(index)} key={preview.id}>{preview.view.replaceAll("_", " ")}</button>)}</div>
     </div> : <p className="notice warning">Preview regeneration is unavailable. Showing the canonical dimension box below as the persistent fallback.</p>}
     <div className="review-facts"><span><small>Dimensions</small>{geometry.canonical_dimensions_mm.width.toFixed(0)} × {geometry.canonical_dimensions_mm.height.toFixed(0)} × {geometry.canonical_dimensions_mm.depth.toFixed(0)} mm</span><span><small>Weight</small>{Number(weight || 0).toLocaleString()} g</span><span><small>Priority</small>{"★".repeat(priority)}{"☆".repeat(5 - priority)}</span><span><small>Handling</small>{handling.fragility} fragility · {handling.stack_class.replaceAll("_", " ")}</span></div>
