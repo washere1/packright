@@ -324,7 +324,7 @@ Public limits are defined in [`config/limits.json`](config/limits.json) and expo
 
 Uploads are streamed to generated temporary paths, validated before acceptance, and atomically moved into generated asset directories. User filenames never become storage paths. The API binds to `127.0.0.1` by default and logs request metadata without logging uploaded contents or credentials.
 
-## Honest limitations
+## Limitations
 
 PackRight is a planning aid, not an airline, safety, or physics certification system.
 
