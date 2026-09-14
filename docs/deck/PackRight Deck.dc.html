@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" fill="#e8590c"/><rect x="60" y="70" width="80" height="60" rx="10" fill="#14120f"/><rect x="85" y="56" width="30" height="14" rx="4" fill="#14120f"/></svg></template>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#1a1815;font-family:'Archivo',Helvetica,sans-serif;}
+a{color:#e8590c;text-decoration:none;}a:hover{color:#b8430a;}
+</style>
+</helmet>
+<x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1920" height="1080" hint-size="100%,100%" data-uneditable="">
+
+<section data-document-role="page" data-label="Title" data-speaker-notes="Hi, we're PackRight. Everyone here has stood at a check-in desk shuffling things between bags." style="background:#14120f;color:#f7f4ee;padding:100px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;font-family:'Archivo',sans-serif;">
+  <div style="display:flex;justify-content:space-between;align-items:center;font-family:'IBM Plex Mono',monospace;font-size:28px;color:#a39d92;">
+    <span>HackCMU 2026</span>
+
+  </div>
+  <div style="display:flex;flex-direction:column;gap:36px;">
+    <div style="display:flex;align-items:center;gap:28px;">
+      <div style="width:56px;height:56px;background:#e8590c;border-radius:12px;"></div>
+      <span style="font-size:44px;font-weight:700;letter-spacing:-0.01em;">PackRight</span>
+    </div>
+    <h1 style="margin:0;font-size:136px;line-height:0.98;font-weight:800;letter-spacing:-0.04em;max-width:1500px;text-wrap:balance;">Pack it right the first time.</h1>
+    <p style="margin:0;font-size:40px;color:#c9c3b8;max-width:1200px;line-height:1.3;">AI-guided packing that fits everything that matters inside your weight and size limits.</p>
+  </div>
+</section>
+
+<section data-document-role="page" data-label="The Overweight Bag Problem" data-speaker-notes="Packing is guesswork. You don't know the weight until the scale at the counter, and you don't know if it fits until you're sitting on the lid." style="background: #f7f4ee; color: #14120f; padding: 100px; box-sizing: border-box; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; font-family: 'Archivo',sans-serif; position: relative">
+  <div style="display:flex;flex-direction:column;gap:52px;">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;color:#e8590c;">01 — The problem</span>
+    <h2 style="margin:0;font-size:80px;line-height:1.02;font-weight:800;letter-spacing:-0.03em;">The Overweight Bag Problem</h2>
+    <p style="margin:0;font-size:36px;line-height:1.35;color:#3f3a33;max-width:720px;">Packing is guesswork. You learn the real weight at the check-in scale, and whether it fits only when the zipper won't close.</p>
+  </div>
+
+<img src="./pasted-1789232988190-0-mtyn4hfu-6dln.png" alt="pasted-1789232988190-0" width="800" height="437" style="max-width: 100%; height: 541px; display: block; position: absolute; left: 883px; top: 253px; z-index: 1; object-fit: cover; width: 936px; aspect-ratio: 800 / 437"></section>
+
+<section data-document-role="page" data-label="What Overpacking Costs" data-speaker-notes="Three kinds of waste: fees for the traveller, items thrown away at the gate, and delays for everyone in line." style="background:#f7f4ee;color:#14120f;padding:100px;box-sizing:border-box;display:flex;flex-direction:column;gap:64px;font-family:'Archivo',sans-serif;">
+  <div style="display:flex;flex-direction:column;gap:24px;">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;color:#e8590c;">01 — The problem</span>
+    <h2 style="margin:0;font-size:80px;line-height:1.02;font-weight:800;letter-spacing:-0.03em;">What Overpacking Costs</h2>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:40px;flex:1;">
+    <div style="background:#14120f;color:#f7f4ee;border-radius:24px;padding:48px;display:flex;flex-direction:column;justify-content:space-between;gap:24px;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;color:#a39d92;">Money</span>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <span style="font-size:64px;font-weight:800;letter-spacing:-0.03em;line-height:1;">Overweight fees</span>
+        <span style="font-size:30px;color:#c9c3b8;line-height:1.35;">Charged per bag, per leg, at the counter with no way to undo.</span>
+      </div>
+    </div>
+    <div style="background:#e8590c;color:#14120f;border-radius:24px;padding:48px;display:flex;flex-direction:column;justify-content:space-between;gap:24px;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;color:#5a2405;">Waste</span>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <span style="font-size:64px;font-weight:800;letter-spacing:-0.03em;line-height:1;">Binned at the gate</span>
+        <span style="font-size:30px;color:#3d1a06;line-height:1.35;">Toiletries, clothes and gifts dumped to make the limit end up as airport landfill.</span>
+      </div>
+    </div>
+    <div style="background:#ffffff;color:#14120f;border-radius:24px;padding:48px;display:flex;flex-direction:column;justify-content:space-between;gap:24px;border:2px solid #e3ded4;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;color:#6f685c;">Time</span>
+      <div style="display:flex;flex-direction:column;gap:16px;">
+        <span style="font-size:64px;font-weight:800;letter-spacing:-0.03em;line-height:1;">Slower queues</span>
+        <span style="font-size:30px;color:#3f3a33;line-height:1.35;">Every repack at the counter holds up the whole line and the airline's staff.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-document-role="page" data-label="Introducing PackRight" data-speaker-notes="PackRight moves that moment from the airport to your bedroom floor. Tell it what you have, tell it the bag, and it tells you what goes where." style="background:#e8590c;color:#14120f;padding:100px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;font-family:'Archivo',sans-serif;">
+  <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;color:#5a2405;">02 — The solution</span>
+  <div style="display:flex;flex-direction:column;gap:40px;">
+    <h2 style="margin:0;font-size:120px;line-height:1;font-weight:800;letter-spacing:-0.04em;max-width:1500px;">Introducing PackRight</h2>
+    <p style="margin:0;font-size:40px;line-height:1.3;max-width:1300px;color:#3d1a06;">Scan your items, rate what matters, enter your bag — and get a validated 3D packing plan with step-by-step instructions before you leave home.</p>
+  </div>
+  <div style="display:flex;gap:24px;font-family:'IBM Plex Mono',monospace;font-size:28px;">
+    <span style="padding:14px 28px;border:2px solid #14120f;border-radius:999px;">Local-first</span>
+    <span style="padding:14px 28px;border:2px solid #14120f;border-radius:999px;">3D scan</span>
+    <span style="padding:14px 28px;border:2px solid #14120f;border-radius:999px;">Gemini + deterministic solver</span>
+  </div>
+</section>
+
+<section data-document-role="page" data-label="Three Inputs Per Item" data-speaker-notes="For each item the user gives just three things: a priority from 1 to 5 stars, its weight, and a 3D scan. Gemini looks at the scan and infers everything else — size, fragility, compressibility, stacking, access importance, liquid risk, category — and the user confirms it. Weight and priority are never touched by the AI." style="background:#f7f4ee;color:#14120f;padding:100px;box-sizing:border-box;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;font-family:'Archivo',sans-serif;">
+  <div style="display:flex;flex-direction:column;gap:52px;">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;color:#e8590c;">02 — How it works</span>
+    <h2 style="margin:0;font-size:80px;line-height:1.02;font-weight:800;letter-spacing:-0.03em;">Three Inputs Per Item</h2>
+    <div style="display:flex;flex-direction:column;gap:36px;">
+      <div style="display:flex;gap:28px;align-items:baseline;">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;color:#e8590c;min-width:60px;">1</span>
+        <div style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:40px;font-weight:700;">Priority</span><span style="font-size:30px;color:#3f3a33;">1 to 5 stars — 5 must go, 1 can stay home</span></div>
+      </div>
+      <div style="display:flex;gap:28px;align-items:baseline;">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;color:#e8590c;min-width:60px;">2</span>
+        <div style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:40px;font-weight:700;">Weight</span><span style="font-size:30px;color:#3f3a33;">Entered in kilograms</span></div>
+      </div>
+      <div style="display:flex;gap:28px;align-items:baseline;">
+        <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;color:#e8590c;min-width:60px;">3</span>
+        <div style="display:flex;flex-direction:column;gap:6px;"><span style="font-size:40px;font-weight:700;">Scan</span><span style="font-size:30px;color:#3f3a33;">A 3D model of the item, scanned then uploaded as GLB</span></div>
+      </div>
+    </div>
+    <p style="margin:0;font-size:30px;line-height:1.4;color:#3f3a33;max-width:760px;padding-top:28px;border-top:2px solid #e3ded4;"><strong style="color:#14120f;">Gemini fills in the rest</strong> from the scan — size, fragility, compressibility, stacking, access importance, liquid risk, category. You confirm; it never touches weight or priority.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:300px 1fr;gap:28px;height:660px;">
+    <div style="position:relative;background:#14120f;border-radius:44px;padding:12px;box-shadow:0 30px 60px rgba(20,18,15,0.12);">
+      <img src="./assets/scanning.gif" alt="Scanning the toolbox with a phone" style="width:100%;height:100%;object-fit:cover;border-radius:34px;display:block;">
+      <span style="position:absolute;left:28px;top:28px;font-family:'IBM Plex Mono',monospace;font-size:22px;color:#f7f4ee;background:#e8590c;padding:8px 14px;border-radius:999px;">1 · Scan</span>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:28px;min-width:0;">
+      <div style="position:relative;flex:1;min-height:0;border-radius:28px;overflow:hidden;box-shadow:0 30px 60px rgba(20,18,15,0.12);">
+        <img src="./assets/weighing.gif" alt="Weighing the toolbox on a kitchen scale" style="width:100%;height:100%;object-fit:cover;display:block;">
+        <span style="position:absolute;left:20px;top:20px;font-family:'IBM Plex Mono',monospace;font-size:22px;color:#f7f4ee;background:#e8590c;padding:8px 14px;border-radius:999px;">2 · Weigh</span>
+      </div>
+      <div style="background:#ffffff;border:2px solid #e3ded4;border-radius:28px;padding:28px 32px;display:flex;flex-direction:column;gap:18px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;">
+          <span style="font-size:36px;font-weight:700;">Toolbox</span>
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;padding:8px 18px;background:#f7f4ee;border-radius:12px;">3.2 kg</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;">
+          <span style="font-family:'IBM Plex Mono',monospace;font-size:22px;color:#f7f4ee;background:#e8590c;padding:8px 14px;border-radius:999px;">3 · Rate</span>
+          <div style="display:flex;gap:10px;">
+        <div style="width:36px;height:36px;background:#e8590c;border-radius:8px;"></div>
+        <div style="width:36px;height:36px;background:#e8590c;border-radius:8px;"></div>
+        <div style="width:36px;height:36px;background:#e8590c;border-radius:8px;"></div>
+        <div style="width:36px;height:36px;background:#e8590c;border-radius:8px;"></div>
+        <div style="width:36px;height:36px;background:#e3ded4;border-radius:8px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-document-role="page" data-label="Then, the Bag" data-speaker-notes="Then the bag: internal dimensions, the empty weight of the bag itself, the airline's total baggage limit, and a small clearance. The empty weight matters — it comes off your allowance before a single item goes in." style="background:#f7f4ee;color:#14120f;padding:100px;box-sizing:border-box;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;font-family:'Archivo',sans-serif;">
+  <div style="display:flex;flex-direction:column;gap:52px;">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;color:#e8590c;">02 — How it works</span>
+    <h2 style="margin:0;font-size:80px;line-height:1.02;font-weight:800;letter-spacing:-0.03em;">Then, the Bag</h2>
+    <p style="margin:0;font-size:36px;line-height:1.35;color:#3f3a33;max-width:720px;">Internal dimensions of the carry-on or suitcase, the empty weight of the bag itself, and the airline's total limit. That defines the box — and the allowance — everything has to fit in.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;">
+    <div style="background:#ffffff;border:2px solid #e3ded4;border-radius:24px;padding:40px;display:flex;flex-direction:column;gap:12px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:26px;color:#6f685c;">Empty weight</span><span style="font-size:64px;font-weight:800;letter-spacing:-0.03em;">3.2 kg</span></div>
+    <div style="background:#ffffff;border:2px solid #e3ded4;border-radius:24px;padding:40px;display:flex;flex-direction:column;gap:12px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:26px;color:#6f685c;">Clearance</span><span style="font-size:64px;font-weight:800;letter-spacing:-0.03em;">8 mm</span></div>
+    <div style="background:#ffffff;border:2px solid #e3ded4;border-radius:24px;padding:40px;display:flex;flex-direction:column;gap:12px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:26px;color:#6f685c;">Length</span><span style="font-size:64px;font-weight:800;letter-spacing:-0.03em;">55 cm</span></div>
+    <div style="background:#ffffff;border:2px solid #e3ded4;border-radius:24px;padding:40px;display:flex;flex-direction:column;gap:12px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:26px;color:#6f685c;">Width</span><span style="font-size:64px;font-weight:800;letter-spacing:-0.03em;">40 cm</span></div>
+    <div style="background:#ffffff;border:2px solid #e3ded4;border-radius:24px;padding:40px;display:flex;flex-direction:column;gap:12px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:26px;color:#6f685c;">Depth</span><span style="font-size:64px;font-weight:800;letter-spacing:-0.03em;">23 cm</span></div>
+    <div style="background:#14120f;color:#f7f4ee;border-radius:24px;padding:40px;display:flex;flex-direction:column;gap:12px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:26px;color:#a39d92;">Baggage limit</span><span style="font-size:64px;font-weight:800;letter-spacing:-0.03em;color:#e8590c;">10 kg</span></div>
+  </div>
+</section>
+
+<section data-document-role="page" data-label="The Packing Engine" data-speaker-notes="Three stages. Gemini reads the scan and suggests handling metadata — advisory only. A deterministic solver picks the highest-value subset under the weight allowance and searches collision-free, supported placements with heavy items toward the wheels and quick-access items near the opening. Then a separate validator rebuilds the plan and checks it — the solver never grades its own work." style="background:#14120f;color:#f7f4ee;padding:100px;box-sizing:border-box;display:flex;flex-direction:column;gap:64px;font-family:'Archivo',sans-serif;">
+  <div style="display:flex;flex-direction:column;gap:24px;">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;color:#e8590c;">03 — The engine</span>
+    <h2 style="margin:0;font-size:80px;line-height:1.02;font-weight:800;letter-spacing:-0.03em;">The Packing Engine</h2>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:32px;align-items:center;flex:1;">
+    <div style="border:2px solid #3a362f;border-radius:24px;padding:44px;display:flex;flex-direction:column;gap:28px;height:100%;box-sizing:border-box;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:26px;color:#a39d92;">1 · Gemini understands</span>
+      <span style="font-size:34px;line-height:1.4;font-weight:700;">Reads the scan, suggests handling metadata</span>
+      <span style="font-size:30px;line-height:1.4;color:#c9c3b8;">Fragility · stacking · access · liquid risk · orientations. Advisory only — you confirm.</span>
+    </div>
+    <span style="font-size:64px;color:#e8590c;">→</span>
+    <div style="background:#e8590c;color:#14120f;border-radius:24px;padding:44px;display:flex;flex-direction:column;gap:28px;height:100%;box-sizing:border-box;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:26px;color:#5a2405;">2 · Solver packs</span>
+      <span style="font-size:34px;line-height:1.4;font-weight:700;">Deterministic selection + 3D placement</span>
+      <span style="font-size:30px;line-height:1.4;color:#3d1a06;">Highest-priority feasible subset under the allowance · collision-free, supported placements · heavy toward wheels, quick-access near the lid</span>
+    </div>
+    <span style="font-size:64px;color:#e8590c;">→</span>
+    <div style="border:2px solid #3a362f;border-radius:24px;padding:44px;display:flex;flex-direction:column;gap:28px;height:100%;box-sizing:border-box;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:26px;color:#a39d92;">3 · Validator checks</span>
+      <span style="font-size:34px;line-height:1.4;font-weight:700;">Independently rebuilds and verifies the plan</span>
+      <span style="font-size:30px;line-height:1.4;color:#c9c3b8;">Bounds, collisions, support, weight, sequence. Only then is it marked feasible — with numbered instructions and a 3D viewer.</span>
+    </div>
+  </div>
+</section>
+
+<section data-document-role="page" data-label="Live Demo" data-speaker-notes="Switch to the app. Pick items from the library, set must-pack on one, enter the suitcase, hit Pack these items, then orbit the 3D result and step through the packing order." style="background:#f7f4ee;color:#14120f;padding:100px;box-sizing:border-box;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;font-family:'Archivo',sans-serif;">
+  <div style="display:flex;flex-direction:column;gap:52px;">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;color:#e8590c;">04 — Demo</span>
+    <h2 style="margin:0;font-size:96px;line-height:1;font-weight:800;letter-spacing:-0.04em;">Live Demo</h2>
+    <div style="display:flex;flex-direction:column;gap:20px;font-size:34px;color:#3f3a33;">
+      <span>Scan, weigh and rate an item</span>
+      <span>Select items to pack</span>
+      <span>Enter the suitcase</span>
+      <span>Let it pack — inspect in 3D</span>
+    </div>
+  </div>
+  <div style="aspect-ratio:16/10;width:100%;background:repeating-linear-gradient(135deg,#e9e4da 0 14px,#f2eee6 14px 28px);border:2px dashed #b8b1a4;border-radius:24px;display:flex;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:28px;color:#6f685c;text-align:center;padding:40px;box-sizing:border-box;">screenshot: 3D suitcase viewer with validated plan</div>
+</section>
+
+<section data-document-role="page" data-label="Tech Stack" data-speaker-notes="React and Three.js on the front, FastAPI and SQLite behind, Trimesh for geometry, Gemini for metadata. Local-first: no account, works offline, and the packing engine runs without the AI." style="background:#f7f4ee;color:#14120f;padding:100px;box-sizing:border-box;display:flex;flex-direction:column;gap:64px;font-family:'Archivo',sans-serif;">
+  <div style="display:flex;flex-direction:column;gap:24px;">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;color:#e8590c;">05 — Under the hood</span>
+    <h2 style="margin:0;font-size:80px;line-height:1.02;font-weight:800;letter-spacing:-0.03em;">Tech Stack</h2>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:32px;flex:1;">
+    <div style="background:#ffffff;border:2px solid #e3ded4;border-radius:24px;padding:44px;display:flex;flex-direction:column;justify-content:space-between;gap:24px;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:26px;color:#6f685c;">Frontend</span>
+      <div style="display:flex;flex-direction:column;gap:12px;"><span style="font-size:44px;font-weight:700;letter-spacing:-0.02em;">React + Three.js</span><span style="font-size:28px;color:#3f3a33;line-height:1.35;">TypeScript, Vite; interactive 3D suitcase viewer with GLTFLoader</span></div>
+    </div>
+    <div style="background:#ffffff;border:2px solid #e3ded4;border-radius:24px;padding:44px;display:flex;flex-direction:column;justify-content:space-between;gap:24px;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:26px;color:#6f685c;">Backend</span>
+      <div style="display:flex;flex-direction:column;gap:12px;"><span style="font-size:44px;font-weight:700;letter-spacing:-0.02em;">Python + FastAPI</span><span style="font-size:28px;color:#3f3a33;line-height:1.35;">Pydantic contracts, SQLite, Trimesh geometry in isolated workers</span></div>
+    </div>
+    <div style="background:#e8590c;color:#14120f;border-radius:24px;padding:44px;display:flex;flex-direction:column;justify-content:space-between;gap:24px;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:26px;color:#5a2405;">AI</span>
+      <div style="display:flex;flex-direction:column;gap:12px;"><span style="font-size:44px;font-weight:700;letter-spacing:-0.02em;">Gemini</span><span style="font-size:28px;color:#3d1a06;line-height:1.35;">Handling metadata from previews; strict schema, conservative fallback</span></div>
+    </div>
+    <div style="background:#14120f;color:#f7f4ee;border-radius:24px;padding:44px;display:flex;flex-direction:column;justify-content:space-between;gap:24px;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:26px;color:#a39d92;">Engine</span>
+      <div style="display:flex;flex-direction:column;gap:12px;"><span style="font-size:44px;font-weight:700;letter-spacing:-0.02em;">Solver + validator</span><span style="font-size:28px;color:#c9c3b8;line-height:1.35;">Deterministic placement, independent validation, immutable snapshots</span></div>
+    </div>
+  </div>
+</section>
+
+<section data-document-role="page" data-label="What's Next" data-speaker-notes="Three steps after the hackathon." style="background:#f7f4ee;color:#14120f;padding:100px;box-sizing:border-box;display:flex;flex-direction:column;gap:64px;font-family:'Archivo',sans-serif;">
+  <div style="display:flex;flex-direction:column;gap:24px;">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;color:#e8590c;">06 — Roadmap</span>
+    <h2 style="margin:0;font-size:80px;line-height:1.02;font-weight:800;letter-spacing:-0.03em;">What's Next</h2>
+  </div>
+  <div style="display:flex;flex-direction:column;flex:1;justify-content:center;">
+    <div style="display:grid;grid-template-columns:200px 1fr;gap:40px;padding:40px 0;border-top:2px solid #e3ded4;align-items:baseline;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;color:#e8590c;">Next</span>
+      <div style="display:flex;flex-direction:column;gap:8px;"><span style="font-size:44px;font-weight:700;letter-spacing:-0.02em;">Mobile scanning</span><span style="font-size:30px;color:#3f3a33;">Photogrammetry or depth-camera capture straight from the phone</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:200px 1fr;gap:40px;padding:40px 0;border-top:2px solid #e3ded4;align-items:baseline;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;color:#e8590c;">Then</span>
+      <div style="display:flex;flex-direction:column;gap:8px;"><span style="font-size:44px;font-weight:700;letter-spacing:-0.02em;">Airline baggage-policy integration</span><span style="font-size:30px;color:#3f3a33;">Pick your flight, get size and weight rules filled in</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:200px 1fr;gap:40px;padding:40px 0;border-top:2px solid #e3ded4;border-bottom:2px solid #e3ded4;align-items:baseline;">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:28px;color:#e8590c;">Later</span>
+      <div style="display:flex;flex-direction:column;gap:8px;"><span style="font-size:44px;font-weight:700;letter-spacing:-0.02em;">Soft items and multi-compartment bags</span><span style="font-size:30px;color:#3f3a33;">Compression models for clothing; split across compartments and bags</span></div>
+    </div>
+  </div>
+</section>
+
+<section data-document-role="page" data-label="Thank You" data-speaker-notes="Thanks — questions welcome." style="background:#14120f;color:#f7f4ee;padding:100px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:space-between;font-family:'Archivo',sans-serif;">
+  <div style="display:flex;align-items:center;gap:28px;">
+    <div style="width:56px;height:56px;background:#e8590c;border-radius:12px;"></div>
+    <span style="font-size:44px;font-weight:700;letter-spacing:-0.01em;">PackRight</span>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:36px;">
+    <h2 style="margin:0;font-size:136px;line-height:0.98;font-weight:800;letter-spacing:-0.04em;">Thank you.</h2>
+    <p style="margin:0;font-size:40px;color:#c9c3b8;line-height:1.3;">Pack it right the first time.</p>
+  </div>
+  <div style="display:flex;justify-content:space-between;font-family:'IBM Plex Mono',monospace;font-size:28px;color:#a39d92;">
+    <span>Team PackRight</span>
+    <span>Questions?</span>
+  </div>
+</section>
+
+</x-import>
+</x-dc>
+</body>
+</html>
